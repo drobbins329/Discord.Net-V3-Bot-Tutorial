@@ -1,4 +1,5 @@
-﻿using Discord.WebSocket;
+﻿using Discord.Interactions;
+using Discord.WebSocket;
 using DNet_V3_Bot.Logger;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -18,14 +19,20 @@ namespace DNet_V3_Tutorial
                 .ConfigureServices((_, services) =>
             services
             //.AddTransient<IConsoleLogger, Logger>()
-            .AddTransient<ConsoleLogger>())
-            .Build();
-
-            _client = new DiscordSocketClient(new DiscordSocketConfig()
+            .AddSingleton(x => new DiscordSocketClient(new DiscordSocketConfig
             {
                 GatewayIntents = Discord.GatewayIntents.AllUnprivileged,
                 AlwaysDownloadUsers = true,
-            }) ;
+            }))
+            .AddSingleton(x => new InteractionService(x.GetRequiredService<DiscordSocketClient>()))
+            .AddTransient<ConsoleLogger>())
+            .Build();
+
+            // _client = new DiscordSocketClient(new DiscordSocketConfig()
+            // {
+            //     GatewayIntents = Discord.GatewayIntents.AllUnprivileged,
+            //     AlwaysDownloadUsers = true,
+            // }) ;
 
             await RunAsync(host);
         }
@@ -35,7 +42,12 @@ namespace DNet_V3_Tutorial
             using IServiceScope serviceScope = host.Services.CreateScope();
             IServiceProvider provider = serviceScope.ServiceProvider;
 
+            var commands = provider.GetRequiredService<InteractionService>();
+            _client = provider.GetRequiredService<DiscordSocketClient>();
+            
             _client.Log += _ => provider.GetRequiredService<ConsoleLogger>().Log(_);
+            commands.Log += _ => provider.GetRequiredService<ConsoleLogger>().Log(_);
+
 
             var token = "NzI2MjQxODgwMTY5MjUwOTE5.XvabdQ.GOUUFV6cO6R6RPGNLKbcMs_zJxw";
             await _client.LoginAsync(Discord.TokenType.Bot, token);
