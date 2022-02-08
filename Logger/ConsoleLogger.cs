@@ -4,8 +4,10 @@ namespace DNet_V3_Bot.Logger
 {
     public class ConsoleLogger : Logger
     {
+        // Override Log method from ILogger, passing message to LogToConsoleAsync()
         public override async Task Log(LogMessage message)
         {
+            // Using Task.Run() in case there are any long running actions, to prevent blocking gateway
             Task.Run(() => LogToConsoleAsync(this, message));
         }
 

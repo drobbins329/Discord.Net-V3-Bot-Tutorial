@@ -1,22 +1,21 @@
 ﻿using Discord.Interactions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DNet_V3_Tutorial
 {
+    // Must use InteractionModuleBase<SocketInteractionContext> for the InteractionService to auto-register the commands
     public class PingModule : InteractionModuleBase<SocketInteractionContext>
     {
         public InteractionService Commands { get; set; }
 
-        private CommandHandler _handler;
-        public PingModule(CommandHandler handler)
+        private InteractionCommandHandler _handler;
+        public PingModule(InteractionCommandHandler handler)
         {
             _handler = handler;
         }
 
+
+        // Basic slash command. [SlashCommand("name", "description")]
+        // Similar to text command creation, and their respective attributes
         [SlashCommand("ping", "Receive a pong!")]
         public async Task Ping()
         {

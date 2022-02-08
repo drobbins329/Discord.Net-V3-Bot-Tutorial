@@ -8,7 +8,7 @@ namespace DNet_V3_Bot.Logger
         public string _guid;
         public Logger()
         {
-            //_consoleLogger = consoleLogger;
+            // extra data to show individual logger instances
             _guid = NewGuid().ToString()[^4..];
         }
 

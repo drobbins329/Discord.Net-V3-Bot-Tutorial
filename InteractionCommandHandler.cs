@@ -1,22 +1,18 @@
 ﻿using Discord;
 using Discord.Interactions;
 using Discord.WebSocket;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DNet_V3_Tutorial
 {
-    public class CommandHandler
+    public class InteractionCommandHandler
     {
         private readonly DiscordSocketClient _client;
         private readonly InteractionService _commands;
         private readonly IServiceProvider _services;
 
-        public CommandHandler(DiscordSocketClient client, InteractionService commands, IServiceProvider services)
+        // Using constructor injection
+        public InteractionCommandHandler(DiscordSocketClient client, InteractionService commands, IServiceProvider services)
         {
             _client = client;
             _commands = commands;

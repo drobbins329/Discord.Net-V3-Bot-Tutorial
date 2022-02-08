@@ -5,10 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration.Yaml;
-using YamlDotNet;
-using System;
-using System.Collections;
-using DNet_V3_Bot;
 
 namespace DNet_V3_Tutorial
 {
@@ -16,36 +12,37 @@ namespace DNet_V3_Tutorial
     {
         private DiscordSocketClient _client;        
         
+        // Program entry point
         public static Task Main(string[] args) => new program().MainAsync();
 
         public async Task MainAsync()
         {
             var config = new ConfigurationBuilder()
             .AddEnvironmentVariables(prefix: "&")
+            // this will be used more later on
             .SetBasePath(AppContext.BaseDirectory)
+            // I chose using YML files for my config data as I am familiar with them
             .AddYamlFile("config.yml")
             .Build();
             
             using IHost host = Host.CreateDefaultBuilder()
                 .ConfigureServices((_, services) =>
             services
-            //.AddTransient<IConsoleLogger, Logger>()
+            // Add the configuration to the registered services
             .AddSingleton(config)
+            // Add the DiscordSocketClient, along with specifying the GatewayIntents and user caching
             .AddSingleton(x => new DiscordSocketClient(new DiscordSocketConfig
             {
                 GatewayIntents = Discord.GatewayIntents.AllUnprivileged,
                 AlwaysDownloadUsers = true,
             }))
+            // Used for slash commands and their registration with Discord
             .AddSingleton(x => new InteractionService(x.GetRequiredService<DiscordSocketClient>()))
-            .AddSingleton<CommandHandler>()
+            // Required to subscribe to the various client events used in conjunction with Interactions
+            .AddSingleton<InteractionCommandHandler>()
+            // Adding console logging
             .AddTransient<ConsoleLogger>())
             .Build();
-
-            // _client = new DiscordSocketClient(new DiscordSocketConfig()
-            // {
-            //     GatewayIntents = Discord.GatewayIntents.AllUnprivileged,
-            //     AlwaysDownloadUsers = true,
-            // }) ;
 
             await RunAsync(host);
         }
@@ -59,17 +56,21 @@ namespace DNet_V3_Tutorial
             _client = provider.GetRequiredService<DiscordSocketClient>();
             var config = provider.GetRequiredService<IConfigurationRoot>();
 
-            await provider.GetRequiredService<CommandHandler>().InitializeAsync();
+            await provider.GetRequiredService<InteractionCommandHandler>().InitializeAsync();
 
+            // Subscribe to client log events
             _client.Log += _ => provider.GetRequiredService<ConsoleLogger>().Log(_);
+            // Subscribe to slash command log events
             commands.Log += _ => provider.GetRequiredService<ConsoleLogger>().Log(_);
 
             _client.Ready += async () =>
             {
+                // If running the bot with DEBUG flag, register all commands to guild specified in config
                 if (IsDebug())
                     // Id of the test guild can be provided from the Configuration object
                     await commands.RegisterCommandsToGuildAsync(UInt64.Parse(config["testGuild"]), true);
                 else
+                    // If not debug, register commands globally
                     await commands.RegisterCommandsGloballyAsync(true);
             };
 
