@@ -5,14 +5,14 @@ using System.Reflection;
 
 namespace DNet_V3_Tutorial
 {
-    public class InteractionCommandHandler
+    public class InteractionHandler
     {
         private readonly DiscordSocketClient _client;
         private readonly InteractionService _commands;
         private readonly IServiceProvider _services;
 
         // Using constructor injection
-        public InteractionCommandHandler(DiscordSocketClient client, InteractionService commands, IServiceProvider services)
+        public InteractionHandler(DiscordSocketClient client, InteractionService commands, IServiceProvider services)
         {
             _client = client;
             _commands = commands;
@@ -31,6 +31,7 @@ namespace DNet_V3_Tutorial
             _commands.SlashCommandExecuted += SlashCommandExecuted;
             _commands.ContextCommandExecuted += ContextCommandExecuted;
             _commands.ComponentCommandExecuted += ComponentCommandExecuted;
+            _commands.ModalCommandExecuted += ModalCommandExecuted;
         }
 
         private Task ComponentCommandExecuted(ComponentCommandInfo arg1, Discord.IInteractionContext arg2, IResult arg3)
@@ -44,6 +45,11 @@ namespace DNet_V3_Tutorial
         }
 
         private Task SlashCommandExecuted(SlashCommandInfo arg1, Discord.IInteractionContext arg2, IResult arg3)
+        {
+            return Task.CompletedTask;
+        }
+
+        private Task ModalCommandExecuted(ModalCommandInfo arg1, Discord.IInteractionContext arg2, IResult arg3)
         {
             return Task.CompletedTask;
         }

@@ -39,7 +39,7 @@ namespace DNet_V3_Tutorial
             // Used for slash commands and their registration with Discord
             .AddSingleton(x => new InteractionService(x.GetRequiredService<DiscordSocketClient>()))
             // Required to subscribe to the various client events used in conjunction with Interactions
-            .AddSingleton<InteractionCommandHandler>()
+            .AddSingleton<InteractionHandler>()
             // Adding console logging
             .AddTransient<ConsoleLogger>())
             .Build();
@@ -56,7 +56,7 @@ namespace DNet_V3_Tutorial
             _client = provider.GetRequiredService<DiscordSocketClient>();
             var config = provider.GetRequiredService<IConfigurationRoot>();
 
-            await provider.GetRequiredService<InteractionCommandHandler>().InitializeAsync();
+            await provider.GetRequiredService<InteractionHandler>().InitializeAsync();
 
             // Subscribe to client log events
             _client.Log += _ => provider.GetRequiredService<ConsoleLogger>().Log(_);
