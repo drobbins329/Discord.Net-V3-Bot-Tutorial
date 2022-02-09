@@ -7,10 +7,9 @@ namespace DNet_V3_Tutorial
     {
         public InteractionService Commands { get; set; }
 
-        private InteractionCommandHandler _handler;
-        public PingModule(InteractionCommandHandler handler)
+        public PingModule()
         {
-            _handler = handler;
+            // nothing to see here
         }
 
 
