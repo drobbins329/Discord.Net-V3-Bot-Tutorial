@@ -6,10 +6,11 @@ namespace DNet_V3_Tutorial
     public class PingModule : InteractionModuleBase<SocketInteractionContext>
     {
         public InteractionService Commands { get; set; }
+		private static Logger _logger;
 
-        public PingModule()
+        public PingModule(Logger logger)
         {
-            // nothing to see here
+            _logger = logger;
         }
 
 
@@ -18,7 +19,8 @@ namespace DNet_V3_Tutorial
         [SlashCommand("ping", "Receive a pong!")]
         public async Task Ping()
         {
-            await RespondAsync("pong");
+            logger.Log(LogSeverity.Info, "PingModule : Ping", $"User: {Context.User.Username}, Command: {Context.Interaction.Data.CustomId}", null);
+			await RespondAsync("pong");
         }
     }
 }
