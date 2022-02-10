@@ -1,4 +1,8 @@
-﻿using Discord.Interactions;
+﻿using Discord;
+using Discord.Interactions;
+using Discord.WebSocket;
+using DNet_V3_Bot.Logger;
+using System.Linq;
 
 namespace DNet_V3_Tutorial
 {
@@ -8,7 +12,7 @@ namespace DNet_V3_Tutorial
         public InteractionService Commands { get; set; }
 		private static Logger _logger;
 
-        public PingModule(Logger logger)
+        public PingModule(ConsoleLogger logger)
         {
             _logger = logger;
         }
@@ -19,7 +23,8 @@ namespace DNet_V3_Tutorial
         [SlashCommand("ping", "Receive a pong!")]
         public async Task Ping()
         {
-            logger.Log(LogSeverity.Info, "PingModule : Ping", $"User: {Context.User.Username}, Command: {Context.Interaction.Data.CustomId}", null);
+            SocketInteraction i = Context.Interaction;
+            await _logger.Log(new LogMessage(LogSeverity.Info, "PingModule : Ping", $"User: {Context.User.Username}, Command: ping", null));
 			await RespondAsync("pong");
         }
     }
