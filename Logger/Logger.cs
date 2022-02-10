@@ -1,7 +1,7 @@
 ﻿using Discord;
 using static System.Guid;
 
-namespace DNet_V3_Bot.Logger
+namespace DNet_V3_Tutorial.Log
 {
     public abstract class Logger : ILogger
     {

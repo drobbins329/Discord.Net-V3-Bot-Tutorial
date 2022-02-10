@@ -1,6 +1,6 @@
 ﻿using Discord.Interactions;
 using Discord.WebSocket;
-using DNet_V3_Bot.Logger;
+using DNet_V3_Tutorial.Log;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
