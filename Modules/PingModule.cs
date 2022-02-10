@@ -1,8 +1,6 @@
 ﻿using Discord;
 using Discord.Interactions;
-using Discord.WebSocket;
-using DNet_V3_Bot.Logger;
-using System.Linq;
+using DNet_V3_Tutorial.Log;
 
 namespace DNet_V3_Tutorial
 {
@@ -10,7 +8,7 @@ namespace DNet_V3_Tutorial
     public class PingModule : InteractionModuleBase<SocketInteractionContext>
     {
         public InteractionService Commands { get; set; }
-		private static Logger _logger;
+        private static Logger _logger;
 
         public PingModule(ConsoleLogger logger)
         {
@@ -23,9 +21,10 @@ namespace DNet_V3_Tutorial
         [SlashCommand("ping", "Receive a pong!")]
         public async Task Ping()
         {
-            SocketInteraction i = Context.Interaction;
+            // New LogMessage created to pass desired info to the console using the existing Discord.Net LogMessage parameters
             await _logger.Log(new LogMessage(LogSeverity.Info, "PingModule : Ping", $"User: {Context.User.Username}, Command: ping", null));
-			await RespondAsync("pong");
+            // Respond to the user
+            await RespondAsync("pong");
         }
     }
 }

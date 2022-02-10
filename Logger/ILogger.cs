@@ -1,6 +1,6 @@
 ﻿using Discord;
 
-namespace DNet_V3_Bot.Logger
+namespace DNet_V3_Tutorial.Log
 {
     public interface ILogger
     {
