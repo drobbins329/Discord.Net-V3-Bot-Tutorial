@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration.Yaml;
+using Discord.Commands;
+using Discord;
 
 namespace DNet_V3_Tutorial
 {
@@ -18,7 +20,6 @@ namespace DNet_V3_Tutorial
         public async Task MainAsync()
         {
             var config = new ConfigurationBuilder()
-            .AddEnvironmentVariables(prefix: "&")
             // this will be used more later on
             .SetBasePath(AppContext.BaseDirectory)
             // I chose using YML files for my config data as I am familiar with them
@@ -41,7 +42,15 @@ namespace DNet_V3_Tutorial
             // Used for slash commands and their registration with Discord
             .AddSingleton(x => new InteractionService(x.GetRequiredService<DiscordSocketClient>()))
             // Required to subscribe to the various client events used in conjunction with Interactions
-            .AddSingleton<InteractionHandler>())
+            .AddSingleton<InteractionHandler>()
+            // Adding the prefix Command Service
+            .AddSingleton(x => new CommandService(new CommandServiceConfig
+            {
+                LogLevel = LogSeverity.Debug,
+                DefaultRunMode = Discord.Commands.RunMode.Async
+            }))
+            // Adding the prefix command handler
+            .AddSingleton<PrefixHandler>())
             .Build();
 
             await RunAsync(host);
@@ -57,6 +66,11 @@ namespace DNet_V3_Tutorial
             var config = provider.GetRequiredService<IConfigurationRoot>();
 
             await provider.GetRequiredService<InteractionHandler>().InitializeAsync();
+
+            var prefixCommands = provider.GetRequiredService<PrefixHandler>();
+            prefixCommands.AddModule<DNet_V3_Bot.Modules.PrefixModule>();
+            await prefixCommands.InitializeAsync();
+
 
             // Subscribe to client log events
             _client.Log += _ => provider.GetRequiredService<ConsoleLogger>().Log(_);
