@@ -40,7 +40,7 @@ The other branches are feature additions on top of the boilerplate code. They ca
 ## Additional Files Required
 config.yml (Must end up in same directory as bot executable)
 Sample config.yml contents below:
-``
+```
 testguild: test_guild_id_here
 tokens:
     discord: discord_bot_token_here
