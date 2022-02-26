@@ -18,7 +18,6 @@ namespace DNet_V3_Tutorial
         public async Task MainAsync()
         {
             var config = new ConfigurationBuilder()
-            .AddEnvironmentVariables(prefix: "&")
             // this will be used more later on
             .SetBasePath(AppContext.BaseDirectory)
             // I chose using YML files for my config data as I am familiar with them
