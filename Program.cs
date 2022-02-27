@@ -44,7 +44,7 @@ namespace DNet_V3_Tutorial
             };
 
 
-            await _client.LoginAsync(Discord.TokenType.Bot, "NzI2MjQxODgwMTY5MjUwOTE5.XvabdQ.2M9oa5Zj3RugZi2U1F3nMZgm8nA");
+            await _client.LoginAsync(Discord.TokenType.Bot, "insert_bot_token_here");
             await _client.StartAsync();
 
             await Task.Delay(-1);
