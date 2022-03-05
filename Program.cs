@@ -6,9 +6,7 @@ using Discord;
 namespace DNet_V3_Tutorial
 {
     public class program
-    {
-        private DiscordSocketClient _client;        
-        
+    {       
         // Program entry point
         public static Task Main(string[] args) => new program().MainAsync();
 
@@ -33,7 +31,7 @@ namespace DNet_V3_Tutorial
             using IServiceScope serviceScope = host.Services.CreateScope();
             IServiceProvider provider = serviceScope.ServiceProvider;
 
-            _client = provider.GetRequiredService<DiscordSocketClient>();
+            var _client = provider.GetRequiredService<DiscordSocketClient>();
 
             // Subscribe to client log events
             _client.Log += async (LogMessage msg) => { Console.WriteLine(msg.Message); };
