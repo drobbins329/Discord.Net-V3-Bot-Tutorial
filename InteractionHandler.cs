@@ -59,7 +59,7 @@ namespace DNet_V3_Tutorial
             {
                 // Create an execution context that matches the generic type parameter of your InteractionModuleBase<T> modules
                 var ctx = new SocketInteractionContext(_client, arg);
-                await _commands.ExecuteCommandAsync(ctx, _services);
+                var result = await _commands.ExecuteCommandAsync(ctx, _services);
             }
             catch (Exception ex)
             {

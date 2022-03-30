@@ -34,6 +34,7 @@ namespace DNet_V3_Tutorial
             {
                 GatewayIntents = Discord.GatewayIntents.AllUnprivileged,
                 AlwaysDownloadUsers = true,
+                LogLevel = Discord.LogSeverity.Debug
             }))
             // Adding console logging
             .AddTransient<ConsoleLogger>()
