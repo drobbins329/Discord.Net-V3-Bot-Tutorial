@@ -25,7 +25,7 @@ namespace DNet_V3_Tutorial
         }
 
         [ModalInteraction("modal_input_demo")]
-        public async Task ModalResponce(HelloModal modal)
+        public async Task ModalResponse(HelloModal modal)
         {
             // Build the message to send.
             string message = $"{modal.Greeting}";
