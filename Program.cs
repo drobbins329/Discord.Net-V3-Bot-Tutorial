@@ -17,6 +17,7 @@ namespace DNet_V3_Tutorial
         // Program entry point
         public static Task Main(string[] args) => new program().MainAsync();
 
+
         public async Task MainAsync()
         {
             var config = new ConfigurationBuilder()
@@ -35,7 +36,9 @@ namespace DNet_V3_Tutorial
             .AddSingleton(x => new DiscordSocketClient(new DiscordSocketConfig
             {
                 GatewayIntents = Discord.GatewayIntents.AllUnprivileged,
+                LogGatewayIntentWarnings = false,
                 AlwaysDownloadUsers = true,
+                LogLevel = LogSeverity.Debug
             }))
 			// Adding console logging
             .AddTransient<ConsoleLogger>()
